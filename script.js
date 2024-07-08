@@ -9,12 +9,33 @@ const gameboard = (function () {
     function placeMark(mark, index) {
         if (!['X', 'O'].includes(mark)) return;
         if (index >= 9) return;
+        if (board[index] != undefined) return;
 
         board[index] = mark;
+        updateBoard();
+        return true;
+    }
+
+    function updateBoard() {
+        for (let i = 0; i < 9; i++) {
+            switch (board[i]) {
+                case "X":
+                    xMarks.item(i).style.display = "block";
+                    break;
+                case "O":
+                    oMarks.item(i).style.display = "block";
+                    break;
+                case undefined:
+                    xMarks.item(i).style.display = "none";
+                    oMarks.item(i).style.display = "none";
+                    break;
+            }
+        }
     }
 
     function clearBoard() {
         board = [];
+        updateBoard();
     }
 
     function getMark(index) {
@@ -54,22 +75,71 @@ const gameboard = (function () {
         return { win: false, mark: null };
     }
 
-    return { placeMark, clearBoard, checkWin, getMark, isFull };
+    function isTie() {
+        if (isFull() && !checkWin().win) return true;
+        return false;
+    }
+
+    return { placeMark, clearBoard, checkWin, getMark, isTie };
 })();
 
 const game = (function () {
     let playerTurn = false; //false: Player 1 turn; true: Player 2 turn;
-    let isWon = false;
-    function playRound() {
+
+    let player1 = createPlayer("X");
+    let player2 = createPlayer("O");
+
+    function playRound(index) {
         if (!playerTurn) {
-            console.log("Player1 Turn");
-            gameboard.placeMark(player1.mark,);
+            playerTurnBanner.textContent = "O's turn";
+            gameboard.placeMark(player1.mark, index);
+
+        } else {
+
+            playerTurnBanner.textContent = "X's turn";
+            gameboard.placeMark(player2.mark, index);
+        }
+        playerTurn = !playerTurn;
+        if (gameboard.isTie()) {
+            playerTurnBanner.textContent = "It's a tie";
+            return 0;
+        } else if (gameboard.checkWin().win) {
+            let winner = [player1, player2].find(player => gameboard.checkWin().mark === player.mark);
+            playerTurnBanner.textContent = `${winner.mark} wins!`
+            return 1;
+        } else {
+            return null;
         }
     }
-    return { playRound };
+
+    function reset() {
+        gameboard.clearBoard();
+        playerTurn = false;
+        state = null;
+        playerTurnBanner.textContent = "X's turn";
+    }
+
+    return { playRound, reset };
 })();
 
-let player1 = createPlayer("X");
-let player2 = createPlayer("O");
+const playerTurnBanner = document.querySelector(".player-turn");
+const xMarks = document.querySelectorAll(".x");
+const oMarks = document.querySelectorAll(".o");
+const cells = document.querySelectorAll(".cell");
+const resetButton = document.querySelector(".reset");
 
-game.playRound();
+let state = null
+
+cells.forEach((cell) => {
+    cell.addEventListener("click", (e) => {
+        if (gameboard.getMark(e.target.id) === undefined) {
+            console.log(e.target.id);
+            if (state === null)
+                state = game.playRound(e.target.id);
+        }
+    });
+});
+
+resetButton.addEventListener("click", () => { game.reset() });
+
+

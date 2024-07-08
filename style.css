@@ -1,1 +1,125 @@
 @import "./Normalize.css";
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+
+:root {
+    font-family: Roboto, 'Helvetica';
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #a0b5c4;
+}
+
+.text-wrapper {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    height: 20vmin;
+}
+
+header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 3;
+    background-color: #2b3435;
+    color: white;
+    font-size: 5rem;
+
+}
+
+.player-turn {
+    display: flex;
+    justify-content: center;
+    flex: 2;
+    font-size: 3rem;
+    background-color: #769164;
+    align-items: center;
+}
+
+.game-wrapper {
+    height: 26rem;
+    width: 26rem;
+    display: grid;
+    grid-template-areas:
+        "cell cell cell"
+        "cell cell cell"
+        "cell cell cell";
+    border: 2px solid black;
+    margin-top: 2rem;
+    background-color: white;
+}
+
+.cell {
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cell:hover {
+    background-color: #b6b5b1;
+}
+
+.cell>img {
+    position: absolute;
+
+}
+
+.x {
+    display: none;
+    height: 10rem;
+    width: 10rem;
+}
+
+.o {
+    display: none;
+    height: 7rem;
+    width: 7rem;
+}
+
+
+button {
+    margin-top: 2rem;
+    height: 4rem;
+    width: 8rem;
+    font-size: 2rem;
+    background-color: #2b3435;
+    color: white;
+    border: none;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 800px) {
+    .game-wrapper {
+        height: 69vw;
+        width: 69vw;
+        border: none;
+        background-color: none;
+    }
+
+    .text-wrapper {
+        margin-bottom: 6rem;
+    }
+
+    header {
+        font-size: 4rem;
+    }
+
+    .cell:hover {
+        background-color: white;
+    }
+
+    .cell {
+        height: 99%;
+
+    }
+
+
+}
