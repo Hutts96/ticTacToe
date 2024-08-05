@@ -10,6 +10,7 @@ body {
     flex-direction: column;
     align-items: center;
     background-color: #a0b5c4;
+    height: 100vh;
 }
 
 .text-wrapper {
